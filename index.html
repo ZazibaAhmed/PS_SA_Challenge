@@ -10,14 +10,20 @@
     <link rel="stylesheet" href="https://static.cloud.coveo.com/atomic/v3/themes/coveo.css"/>
     
     <style>
-        :root {
-            --spacing: 8px;
-            --spacing-col: 16px;
-            --search-box-width: 648px;
+        /*:root {
+            --spacing: 12px;
+            --spacing-col: 20px;
+            --search-box-width: 700px;
+        }*/
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+           /* background-color: #f8f9fa; */
         }
 
         body.atomic-modal-opened {
@@ -29,52 +35,53 @@
             grid-template-columns: var(--spacing) 1fr var(--spacing);
             grid-template-areas:
                 '. search      .'
-                '. filterbtn   .'
-                '. status      .'
+                '. error      .'
                 '. breadbox    .'
-                '. topbar      .'
                 '. results     .'
                 '. pagination  .'
+                '. topbar      .'
                 '. .           .';
-        }
-
-        .header-bg {
-            background-color: var(--atomic-neutral-light);
-            grid-area: 1 / -1 / 1 / 1;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding-bottom: 40px;
         }
 
         atomic-facet-manager {
-            display: none;
-        }
-
-        atomic-sort-dropdown {
             display: none;
         }
 
         atomic-search-box {
             grid-area: search;
-            margin: var(--spacing) 0;
+            margin: 24px auto;
             max-width: var(--search-box-width);
+            width: 100%;
         }
 
-        .status {
-            grid-area: status;
+        .error {
+            grid-area: error;
+            max-width: var(--search-box-width);
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
         }
+
 
         atomic-facet-manager {
             grid-area: facets;
-            margin-top: var(--spacing);
+            margin-top: 0;
         }
 
-        atomic-facet-manager>* {
-            margin-bottom: var(--spacing);
+        atomic-facet, atomic-category-facet, atomic-numeric-facet {
+            margin-bottom: 16px;
+        }
+
+        atomic-numeric-facet {
+            margin-top: 16px;
         }
 
         atomic-breadbox {
             grid-area: breadbox;
-            margin-top: var(--spacing);
-            padding-bottom: var(--spacing);
-            border-bottom: 1px solid var(--atomic-neutral);
+            margin: 0 0 var(--spacing) 0;
         }
 
         .topbar {
@@ -91,39 +98,69 @@
 
         .results {
             grid-area: results;
+            padding: 16px;
+           /* background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 12px 0; */
         }
 
         .pagination {
             grid-area: pagination;
-            margin: var(--spacing) 0;
+            margin: 20px 0;
+             /*display: flex;
+            justify-content: center;*/
         }
-
-        .atomic-search-interface-no-results .topbar,
-        .atomic-search-interface-no-results .results,
-        .atomic-search-interface-no-results .pagination {
+          .atomic-search-interface-no-results .topbar,
+            .atomic-search-interface-no-results .results,
+            .atomic-search-interface-no-results .pagination {
             display: none;
+            }
+
+        @media only screen and (min-width: 768px) {
+            atomic-search-interface {
+                grid-template-columns: var(--spacing) 1fr var(--spacing);
+                grid-template-areas:
+                    '. search      .'
+                    '. error      .'
+                    '. facets      .'
+                    '. breadbox    .'
+                    '. results     .'
+                    '. pagination  .';
+            }
+
+            atomic-facet-manager {
+                display: block;
+                margin-bottom: 20px;
+            }
         }
 
         @media only screen and (min-width: 1024px) {
             atomic-search-interface {
                 column-gap: var(--spacing-col);
-                grid-template-columns: 1fr minmax(150px, 325px) minmax(500px, 1100px) 1fr;
+                grid-template-columns: 1fr var(--facet-width) minmax(500px, 900px) 1fr;
                 grid-template-areas:
-                '. .      search      .'
-                '. facets breadbox    .'
-                '. facets topbar      .'
-                '. facets results     .'
-                '. facets pagination  .'
-                '. facets status      .'
-                '. facets .           .';
+                    '. .      search      .'
+                    '. .      error      .'
+                    '. facets breadbox    .'
+                    '. facets results     .'
+                    '. facets pagination  .';
+                padding: 0 20px 40px 20px;
             }
-            
 
             atomic-facet-manager {
                 display: block;
+                margin-bottom: 0;
             }
-            .status {
-                max-width: var(--search-box-width);
+
+            .error {
+                margin-bottom: 12px;
+            }
+        }
+
+        @media only screen and (min-width: 1400px) {
+            atomic-search-interface {
+                grid-template-columns: 1fr var(--facet-width) minmax(500px, 1000px) 1fr;
             }
         }
     </style>
@@ -162,13 +199,7 @@
 
 </head>
 <body>
-    
     <atomic-search-interface id="search" fields-to-include='["image","price","sku"]'>
-       
-
-        <div class="header-bg">
-           
-        </div>
         <atomic-search-box></atomic-search-box>
         
         <atomic-facet-manager>
@@ -185,128 +216,166 @@
         <div class="results">
             <atomic-did-you-mean></atomic-did-you-mean>
             
-            <atomic-result-list display="list" image-size="small">
+            <atomic-result-list image-size="small">
                 <atomic-result-template>
                     <template>
                         <style>
                             .container {
                                 display: flex;
                                 flex-direction: column;
-                                gap: 8px;
-                                margin: 0.5rem;
+                                gap: 10px;
+                                padding: 16px 20px;
+                                transition: background-color 0.2s ease;
+                                background-color: white;
+                                border-radius: 8px;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                width: 100%;
+                            }
+
+                            .container:hover {
+                                background-color: #f8f9fa;
                             }
 
                             .top {
                                 display: flex;
                                 justify-content: space-between;
-                                align-items: center;
+                                align-items: flex-start;
                                 flex-wrap: wrap;
+                                gap: 8px;
                             }
-                            
 
-                            .container atomic-result-section-title{
+                            .container atomic-result-section-title {
                                 font-size: 18px;
-                                width: 80%;
+                                font-weight: 600;
+                                flex: 1;
+                                min-width: 0;
+                            }
+
+                            .container atomic-result-section-title a {
+                                color: #1a73e8;
+                                text-decoration: none;
+                            }
+
+                            .container atomic-result-section-title a:hover {
+                                text-decoration: underline;
                             }
                             
                             .body {
                                 display: flex;
                                 flex-direction: row;
-                                justify-content: space-between;
-                                align-items: center;
-                                gap: 12px;
-                            }
-
-                            .excerpt {
-                                flex: 2;
-                            }
-
-                            .excerpt atomic-result-section-excerpt{
-                                color: var(--atomic-neutral-dark);
-                                width: 80%;
+                                align-items: flex-start;
+                                gap: 16px;
                             }
 
                             .image {
-                                max-width: 150px;
+                                flex-shrink: 0;
+                                width: 120px;
+                                height: 120px;
+                                overflow: hidden;
+                                border-radius: 6px;
+                                background-color: #f8f9fa;
+                            }
+
+                            .image img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            }
+
+                            .content {
+                                flex: 1;
+                                min-width: 0;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 8px;
+                            }
+
+                            atomic-result-section-excerpt {
+                                color: #5f6368;
+                                line-height: 1.5;
                             }
 
                             .footer {
                                 font-size: 0.9em;
                                 display: flex;
-                                flex-direction: column;
-                                gap: 4px;
-                                color: var(--atomic-neutral-dark);
+                                gap: 16px;
+                                color: #5f6368;
+                                flex-wrap: wrap;
                             }
 
-                            .field-label {
-                                font-weight: bold;
+                            .footer span {
+                                display: inline-flex;
+                                align-items: center;
                             }
 
-                            @media (max-width: 600px) {
+                            .footer strong {
+                                color: #202124;
+                                font-weight: 600;
+                            }
+
+                            @media (max-width: 768px) {
+                                .container {
+                                    padding: 14px 16px;
+                                }
+
                                 .body {
-                                flex-direction: column;
+                                    flex-direction: column;
                                 }
 
                                 .image {
-                                max-width: 100%;
+                                    width: 100%;
+                                    max-width: 200px;
+                                    height: 200px;
+                                    margin: 0 auto;
                                 }
                             }
                         </style>
                         <div class="container">
                             <div class="top">
-                                <!-- <atomic-result-section-visual>
-                                    <atomic-field-condition class="field" if-defined="image">
-                                        <atomic-result-image field="image"></atomic-result-image>
-                                    </atomic-field-condition>
-
-                                    <atomic-field-condition class="field" if-not-defined="image">
-                                        <atomic-result-icon class="icon"></atomic-result-icon>
-                                    </atomic-field-condition>
-
-                                </atomic-result-section-visual> -->
-                                 <atomic-result-section-title>
+                                <atomic-result-section-title>
                                     <atomic-result-link></atomic-result-link>
                                 </atomic-result-section-title>
                             </div> 
 
-                             <div class="body">
+                            <div class="body">
                                 <div class="image">
                                     <atomic-result-section-visual>
                                         <atomic-result-image field="image"></atomic-result-image>
                                     </atomic-result-section-visual>
                                 </div>
-                                <div>
+                                <div class="content">
                                     <atomic-result-section-excerpt>
                                         <atomic-result-text field="excerpt"></atomic-result-text>
                                     </atomic-result-section-excerpt>
 
-                                    <!-- Price + SKU -->
                                     <div class="footer">
                                         <atomic-field-condition if-defined="price">
-                                        <span>
-                                            <strong>Price: $</strong> 
-                                            <atomic-result-number field="price"></atomic-result-number> 
-                                        </span>
+                                            <span>
+                                                <strong>Price:</strong> $<atomic-result-number field="price"></atomic-result-number> 
+                                            </span>
                                         </atomic-field-condition>
 
                                         <atomic-field-condition if-defined="sku">
-                                        <span>
-                                            <strong>SKU:</strong> 
-                                            <atomic-result-text field="sku"></atomic-result-text> 
-                                        </span>
-                                        </atomic-field-condition>
-                                        <!-- <atomic-field-condition class="field" if-defined="sku">
-                                            <span class="field-label">
-                                                <atomic-text value="SKU"></atomic-text>:
+                                            <span>
+                                                <strong>SKU:</strong> 
+                                                <atomic-result-text field="sku"></atomic-result-text> 
                                             </span>
-                                            <atomic-result-text field="sku"></atomic-result-text>
-                                        </atomic-field-condition> -->
+                                        </atomic-field-condition>
                                     </div>                            
                                 </div>                        
                             </div>
+                        </div>
                     </template>
                 </atomic-result-template>
             </atomic-result-list>
+        </div>
+
+         <div class="pagination">
+            <atomic-load-more-results></atomic-load-more-results>
+        </div>
+        <div class="error">
+            <atomic-query-error></atomic-query-error>
+            <atomic-no-results></atomic-no-results>
         </div>
   </atomic-search-interface>
 </body>
