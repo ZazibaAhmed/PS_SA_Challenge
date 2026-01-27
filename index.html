@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Coveo Atomic Search</title>
+    
+    <!-- Coveo Atomic CDN -->
+    <script type="module" src="https://static.cloud.coveo.com/atomic/v3/atomic.esm.js"></script>
+    <link rel="stylesheet" href="https://static.cloud.coveo.com/atomic/v3/themes/coveo.css"/>
+    
+    <style>
+        :root {
+            --spacing: 8px;
+            --spacing-col: 16px;
+            --search-box-width: 648px;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        body.atomic-modal-opened {
+            overflow-y: hidden;
+        }
+
+        atomic-search-interface {
+            display: grid;
+            grid-template-columns: var(--spacing) 1fr var(--spacing);
+            grid-template-areas:
+                '. search      .'
+                '. filterbtn   .'
+                '. status      .'
+                '. breadbox    .'
+                '. topbar      .'
+                '. results     .'
+                '. pagination  .'
+                '. .           .';
+        }
+
+        .header-bg {
+            background-color: var(--atomic-neutral-light);
+            grid-area: 1 / -1 / 1 / 1;
+        }
+
+        atomic-facet-manager {
+            display: none;
+        }
+
+        atomic-sort-dropdown {
+            display: none;
+        }
+
+        atomic-search-box {
+            grid-area: search;
+            margin: var(--spacing) 0;
+            max-width: var(--search-box-width);
+        }
+
+        .status {
+            grid-area: status;
+        }
+
+        atomic-facet-manager {
+            grid-area: facets;
+            margin-top: var(--spacing);
+        }
+
+        atomic-facet-manager>* {
+            margin-bottom: var(--spacing);
+        }
+
+        atomic-breadbox {
+            grid-area: breadbox;
+            margin-top: var(--spacing);
+            padding-bottom: var(--spacing);
+            border-bottom: 1px solid var(--atomic-neutral);
+        }
+
+        .topbar {
+            grid-area: topbar;
+            margin: var(--spacing) 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        atomic-did-you-mean {
+            margin-bottom: var(--spacing);
+        }
+
+        .results {
+            grid-area: results;
+        }
+
+        .pagination {
+            grid-area: pagination;
+            margin: var(--spacing) 0;
+        }
+
+        .atomic-search-interface-no-results .topbar,
+        .atomic-search-interface-no-results .results,
+        .atomic-search-interface-no-results .pagination {
+            display: none;
+        }
+
+        @media only screen and (min-width: 1024px) {
+            atomic-search-interface {
+                column-gap: var(--spacing-col);
+                grid-template-columns: 1fr minmax(150px, 325px) minmax(500px, 1100px) 1fr;
+                grid-template-areas:
+                '. .      search      .'
+                '. facets breadbox    .'
+                '. facets topbar      .'
+                '. facets results     .'
+                '. facets pagination  .'
+                '. facets status      .'
+                '. facets .           .';
+            }
+            
+
+            atomic-facet-manager {
+                display: block;
+            }
+            .status {
+                max-width: var(--search-box-width);
+            }
+        }
+    </style>
+
+    <!-- <script>
+        (async () => {
+        await customElements.whenDefined('atomic-search-interface');
+        const searchInterface = document.querySelector('#search');
+
+        await searchInterface.initialize({
+            accessToken: 'xx51fe1f8b-5204-44fd-bce8-47bca909c080',
+            organizationId: 'pq6dopunremjf62dr2y33kdcgo4',
+            renewAccessToken: null,
+        })
+        ​
+        searchInterface.executeFirstSearch();
+        })();
+    </script> -->
+  <script>
+    (async () => {
+        await customElements.whenDefined('atomic-search-interface');
+        const searchInterface = document.querySelector('#search');
+
+        await searchInterface.initialize({
+            accessToken: "xx51fe1f8b-5204-44fd-bce8-47bca909c080",
+            organizationId: "pq6dopunremjf62dr2y33kdcgo4",
+            search: {
+                pipeline: 'test' 
+            }
+        }); 
+
+        searchInterface.executeFirstSearch(); 
+    })();
+    
+  </script>
+
+</head>
+<body>
+    
+    <atomic-search-interface id="search" fields-to-include='["image","price","sku"]'>
+       
+
+        <div class="header-bg">
+           
+        </div>
+        <atomic-search-box></atomic-search-box>
+        
+        <atomic-facet-manager>
+            <atomic-category-facet field="categories" label="Category"></atomic-category-facet>
+            <atomic-numeric-facet field="price" label="Price Range">
+                <atomic-numeric-range start="0" end="49" label="Under $50"></atomic-numeric-range>
+                <atomic-numeric-range start="50" end="150" label="$50 - $150"></atomic-numeric-range>
+                <atomic-numeric-range start="150" end="250" label="$150 - $250"></atomic-numeric-range>
+                <atomic-numeric-range start="250" end="500" label="$250 - $500"></atomic-numeric-range>
+                <atomic-numeric-range start="500" end="1000000" label="Over $500"></atomic-numeric-range>
+            </atomic-numeric-facet>
+      </atomic-facet-manager>
+
+        <div class="results">
+            <atomic-did-you-mean></atomic-did-you-mean>
+            
+            <atomic-result-list display="list" image-size="small">
+                <atomic-result-template>
+                    <template>
+                        <style>
+                            .container {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 8px;
+                                margin: 0.5rem;
+                            }
+
+                            .top {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                flex-wrap: wrap;
+                            }
+                            
+
+                            .container atomic-result-section-title{
+                                font-size: 18px;
+                                width: 80%;
+                            }
+                            
+                            .body {
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-between;
+                                align-items: center;
+                                gap: 12px;
+                            }
+
+                            .excerpt {
+                                flex: 2;
+                            }
+
+                            .excerpt atomic-result-section-excerpt{
+                                color: var(--atomic-neutral-dark);
+                                width: 80%;
+                            }
+
+                            .image {
+                                max-width: 150px;
+                            }
+
+                            .footer {
+                                font-size: 0.9em;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 4px;
+                                color: var(--atomic-neutral-dark);
+                            }
+
+                            .field-label {
+                                font-weight: bold;
+                            }
+
+                            @media (max-width: 600px) {
+                                .body {
+                                flex-direction: column;
+                                }
+
+                                .image {
+                                max-width: 100%;
+                                }
+                            }
+                        </style>
+                        <div class="container">
+                            <div class="top">
+                                <!-- <atomic-result-section-visual>
+                                    <atomic-field-condition class="field" if-defined="image">
+                                        <atomic-result-image field="image"></atomic-result-image>
+                                    </atomic-field-condition>
+
+                                    <atomic-field-condition class="field" if-not-defined="image">
+                                        <atomic-result-icon class="icon"></atomic-result-icon>
+                                    </atomic-field-condition>
+
+                                </atomic-result-section-visual> -->
+                                 <atomic-result-section-title>
+                                    <atomic-result-link></atomic-result-link>
+                                </atomic-result-section-title>
+                            </div> 
+
+                             <div class="body">
+                                <div class="image">
+                                    <atomic-result-section-visual>
+                                        <atomic-result-image field="image"></atomic-result-image>
+                                    </atomic-result-section-visual>
+                                </div>
+                                <div>
+                                    <atomic-result-section-excerpt>
+                                        <atomic-result-text field="excerpt"></atomic-result-text>
+                                    </atomic-result-section-excerpt>
+
+                                    <!-- Price + SKU -->
+                                    <div class="footer">
+                                        <atomic-field-condition if-defined="price">
+                                        <span>
+                                            <strong>Price: $</strong> 
+                                            <atomic-result-number field="price"></atomic-result-number> 
+                                        </span>
+                                        </atomic-field-condition>
+
+                                        <atomic-field-condition if-defined="sku">
+                                        <span>
+                                            <strong>SKU:</strong> 
+                                            <atomic-result-text field="sku"></atomic-result-text> 
+                                        </span>
+                                        </atomic-field-condition>
+                                        <!-- <atomic-field-condition class="field" if-defined="sku">
+                                            <span class="field-label">
+                                                <atomic-text value="SKU"></atomic-text>:
+                                            </span>
+                                            <atomic-result-text field="sku"></atomic-result-text>
+                                        </atomic-field-condition> -->
+                                    </div>                            
+                                </div>                        
+                            </div>
+                    </template>
+                </atomic-result-template>
+            </atomic-result-list>
+        </div>
+  </atomic-search-interface>
+</body>
+</html>
