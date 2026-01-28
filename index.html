@@ -143,30 +143,17 @@
         }
     </style>
 
-    <!-- <script>
-        (async () => {
-        await customElements.whenDefined('atomic-search-interface');
-        const searchInterface = document.querySelector('#search');
-
-        await searchInterface.initialize({
-            accessToken: 'xx51fe1f8b-5204-44fd-bce8-47bca909c080',
-            organizationId: 'pq6dopunremjf62dr2y33kdcgo4',
-            renewAccessToken: null,
-        })
-        ​
-        searchInterface.executeFirstSearch();
-        })();
-    </script> -->
+  <script src="config.js"></script>
   <script>
     (async () => {
         await customElements.whenDefined('atomic-search-interface');
         const searchInterface = document.querySelector('#search');
 
         await searchInterface.initialize({
-            accessToken: "xx51fe1f8b-5204-44fd-bce8-47bca909c080",
-            organizationId: "pq6dopunremjf62dr2y33kdcgo4",
+            accessToken: config.accessToken,
+            organizationId: config.organizationId,
             search: {
-                pipeline: 'test' 
+                pipeline: config.pipeline
             }
         }); 
 
