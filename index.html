@@ -8,140 +8,7 @@
     <!-- Coveo Atomic CDN -->
     <script type="module" src="https://static.cloud.coveo.com/atomic/v3/atomic.esm.js"></script>
     <link rel="stylesheet" href="https://static.cloud.coveo.com/atomic/v3/themes/coveo.css"/>
-    
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body.atomic-modal-opened {
-            overflow-y: hidden;
-        }
-
-        atomic-search-interface {
-            display: grid;
-            grid-template-columns: var(--spacing) 1fr var(--spacing);
-            grid-template-areas:
-                '. search      .'
-                '. error      .'
-                '. breadbox    .'
-                '. results     .'
-                '. pagination  .';
-            background-color: #f8f9fa;
-            min-height: 100vh;
-            padding-bottom: 40px;
-        }
-
-        atomic-facet-manager {
-            display: none;
-        }
-
-        atomic-search-box {
-            grid-area: search;
-            margin: 24px auto;
-            width: min(100%, var(--search-box-width));
-            /*min-width: min(100%, var(--search-box-width));*/
-            width: 80%;
-        }
-
-        .error {
-            grid-area: error;
-            max-width: var(--search-box-width);
-            width: 100%;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-
-        atomic-facet-manager {
-            grid-area: facets;
-            margin-top: 0;
-        }
-
-        atomic-facet, atomic-category-facet, atomic-numeric-facet {
-            margin-bottom: 16px;
-        }
-
-        atomic-numeric-facet {
-            margin-top: 16px;
-        }
-
-        atomic-breadbox {
-            grid-area: breadbox;
-            margin: 0 0 var(--spacing) 0;
-        }
-
-        atomic-did-you-mean {
-            margin-bottom: var(--spacing);
-        }
-
-        .results {
-            grid-area: results;
-            padding: 16px;
-        }
-
-        .pagination {
-            grid-area: pagination;
-            margin: 20px 0;
-        }
-        .atomic-search-interface-no-results .results,
-        .atomic-search-interface-no-results .pagination {
-            display: none;
-        }
-
-        @media only screen and (min-width: 768px) {
-            atomic-search-interface {
-                grid-template-columns: var(--spacing) 1fr var(--spacing);
-                grid-template-areas:
-                    '. search      .'
-                    '. error      .'
-                    '. facets      .'
-                    '. breadbox    .'
-                    '. results     .'
-                    '. pagination  .';
-            }
-
-            atomic-facet-manager {
-                display: block;
-                margin-bottom: 20px;
-            }
-        }
-
-        @media only screen and (min-width: 1024px) {
-            atomic-search-interface {
-                column-gap: var(--spacing-col);
-                grid-template-columns: 1fr var(--facet-width) minmax(500px, 900px) 1fr;
-                grid-template-areas:
-                    '. .      search      .'
-                    '. .      error      .'
-                    '. facets breadbox    .'
-                    '. facets results     .'
-                    '. facets pagination  .';
-                justify-content: center;
-                padding: 0 20px 40px 20px;
-            }
-
-            atomic-facet-manager {
-                display: block;
-                margin-bottom: 0;
-            }
-
-            .error {
-                margin-bottom: 12px;
-            }
-        }
-
-        @media only screen and (min-width: 1400px) {
-            atomic-search-interface {
-                grid-template-columns: 1fr var(--facet-width) minmax(500px, 1000px) 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"/>
 
   <script src="config.js"></script>
   <script>
@@ -159,10 +26,9 @@
 
         searchInterface.executeFirstSearch(); 
     })();
-    
   </script>
-
 </head>
+
 <body>
     <atomic-search-interface id="search" fields-to-include='["image","price","sku"]'>
         <atomic-search-box></atomic-search-box>
@@ -176,7 +42,7 @@
                 <atomic-numeric-range start="250" end="500" label="$250 - $500"></atomic-numeric-range>
                 <atomic-numeric-range start="500" end="1000000" label="Over $500"></atomic-numeric-range>
             </atomic-numeric-facet>
-      </atomic-facet-manager>
+        </atomic-facet-manager>
 
         <div class="results">
             <atomic-did-you-mean></atomic-did-you-mean>
