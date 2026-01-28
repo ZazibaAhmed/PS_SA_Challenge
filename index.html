@@ -10,12 +10,6 @@
     <link rel="stylesheet" href="https://static.cloud.coveo.com/atomic/v3/themes/coveo.css"/>
     
     <style>
-        /*:root {
-            --spacing: 12px;
-            --spacing-col: 20px;
-            --search-box-width: 700px;
-        }*/
-
         * {
             box-sizing: border-box;
         }
@@ -23,7 +17,6 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-           /* background-color: #f8f9fa; */
         }
 
         body.atomic-modal-opened {
@@ -38,9 +31,7 @@
                 '. error      .'
                 '. breadbox    .'
                 '. results     .'
-                '. pagination  .'
-                '. topbar      .'
-                '. .           .';
+                '. pagination  .';
             background-color: #f8f9fa;
             min-height: 100vh;
             padding-bottom: 40px;
@@ -53,8 +44,9 @@
         atomic-search-box {
             grid-area: search;
             margin: 24px auto;
-            max-width: var(--search-box-width);
-            width: 100%;
+            width: min(100%, var(--search-box-width));
+            /*min-width: min(100%, var(--search-box-width));*/
+            width: 80%;
         }
 
         .error {
@@ -84,14 +76,6 @@
             margin: 0 0 var(--spacing) 0;
         }
 
-        .topbar {
-            grid-area: topbar;
-            margin: var(--spacing) 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         atomic-did-you-mean {
             margin-bottom: var(--spacing);
         }
@@ -99,23 +83,16 @@
         .results {
             grid-area: results;
             padding: 16px;
-           /* background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 12px 0; */
         }
 
         .pagination {
             grid-area: pagination;
             margin: 20px 0;
-             /*display: flex;
-            justify-content: center;*/
         }
-          .atomic-search-interface-no-results .topbar,
-            .atomic-search-interface-no-results .results,
-            .atomic-search-interface-no-results .pagination {
+        .atomic-search-interface-no-results .results,
+        .atomic-search-interface-no-results .pagination {
             display: none;
-            }
+        }
 
         @media only screen and (min-width: 768px) {
             atomic-search-interface {
@@ -145,6 +122,7 @@
                     '. facets breadbox    .'
                     '. facets results     .'
                     '. facets pagination  .';
+                justify-content: center;
                 padding: 0 20px 40px 20px;
             }
 
